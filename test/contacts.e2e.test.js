@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 const request = require('supertest');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
@@ -17,27 +16,25 @@ describe('Testing the route api/contacts', () => {
   let idNewContact;
 
   describe('Testing get all contacts', () => {
-    it('Get all contacts success should return 200 status', async done => {
+    it('Get all contacts success should return 200 status', async () => {
       const res = await request(app)
         .get('/api/contacts')
         .set('Authorization', `Bearer ${token}`);
       expect(res.status).toEqual(200);
       expect(res.body).toBeDefined();
       expect(res.body.data.contacts).toBeInstanceOf(Array);
-      done();
     });
 
-    it('Unauthorized error should return 401 status', async done => {
+    it('Unauthorized error should return 401 status', async () => {
       const res = await request(app)
         .get('/api/users/current')
         .set('Authorization', `Bearer ${123}`);
       expect(res.status).toEqual(401);
-      done();
     });
   });
 
   describe('Testing get contact by ID', () => {
-    it('Get contact by ID success should return 200 status', async done => {
+    it('Get contact by ID success should return 200 status', async () => {
       const contact = contacts[0];
       const res = await request(app)
         .get(`/api/contacts/${contact._id}`)
@@ -46,30 +43,27 @@ describe('Testing the route api/contacts', () => {
       expect(res.body).toBeDefined();
       expect(res.body.data.contact).toHaveProperty('_id');
       expect(res.body.data.contact._id).toBe(contact._id);
-      done();
     });
 
-    it('Contact not found should return 404 status', async done => {
+    it('Contact not found should return 404 status', async () => {
       const wrongId = 12345;
       const res = await request(app)
         .get(`/api/contacts/${wrongId}`)
         .set('Authorization', `Bearer ${token}`);
       expect(res.status).toEqual(404);
-      done();
     });
 
-    it('Unauthorized error should return 401 status', async done => {
+    it('Unauthorized error should return 401 status', async () => {
       const contact = contacts[0];
       const res = await request(app)
         .get(`/api/contacts/${contact._id}`)
         .set('Authorization', `Bearer ${123}`);
       expect(res.status).toEqual(401);
-      done();
     });
   });
 
   describe('Testing create new contact', () => {
-    it('Add contact success should return 201 status', async done => {
+    it('Add contact success should return 201 status', async () => {
       const res = await request(app)
         .post('/api/contacts')
         .set('Authorization', `Bearer ${token}`)
@@ -79,10 +73,9 @@ describe('Testing the route api/contacts', () => {
       expect(res.status).toEqual(201);
       expect(res.body).toBeDefined();
       idNewContact = res.body.data.contact._id;
-      done();
     });
 
-    it('Wrong field should return 400 status', async done => {
+    it('Wrong field should return 400 status', async () => {
       const res = await request(app)
         .post('/api/contacts')
         .set('Authorization', `Bearer ${token}`)
@@ -91,10 +84,9 @@ describe('Testing the route api/contacts', () => {
 
       expect(res.status).toEqual(400);
       expect(res.body).toBeDefined();
-      done();
     });
 
-    it('Should return 400 status without required field name', async done => {
+    it('Should return 400 status without required field name', async () => {
       const res = await request(app)
         .post('/api/contacts')
         .set('Authorization', `Bearer ${token}`)
@@ -103,10 +95,9 @@ describe('Testing the route api/contacts', () => {
 
       expect(res.status).toEqual(400);
       expect(res.body).toBeDefined();
-      done();
     });
 
-    it('Unauthorized error should return 401 status', async done => {
+    it('Unauthorized error should return 401 status', async () => {
       const res = await request(app)
         .post('/api/contacts')
         .set('Authorization', `Bearer ${123}`)
@@ -115,12 +106,11 @@ describe('Testing the route api/contacts', () => {
 
       expect(res.status).toEqual(401);
       expect(res.body).toBeDefined();
-      done();
     });
   });
 
   describe('Testing update contact', () => {
-    it('Update contact success should return 200 status', async done => {
+    it('Update contact success should return 200 status', async () => {
       const res = await request(app)
         .patch(`/api/contacts/${idNewContact}`)
         .set('Authorization', `Bearer ${token}`)
@@ -130,10 +120,9 @@ describe('Testing the route api/contacts', () => {
       expect(res.status).toEqual(200);
       expect(res.body).toBeDefined();
       expect(res.body.data.contact.name).toBe('Alla');
-      done();
     });
 
-    it('Wrong field subscription should return 400 status', async done => {
+    it('Wrong field subscription should return 400 status', async () => {
       const res = await request(app)
         .patch(`/api/contacts/${idNewContact}`)
         .set('Authorization', `Bearer ${token}`)
@@ -142,10 +131,9 @@ describe('Testing the route api/contacts', () => {
 
       expect(res.status).toEqual(400);
       expect(res.body).toBeDefined();
-      done();
     });
 
-    it('Should return 404 status with wrong id', async done => {
+    it('Should return 404 status with wrong id', async () => {
       const res = await request(app)
         .patch(`/api/contacts/${123}`)
         .set('Authorization', `Bearer ${token}`)
@@ -154,10 +142,9 @@ describe('Testing the route api/contacts', () => {
 
       expect(res.status).toEqual(404);
       expect(res.body).toBeDefined();
-      done();
     });
 
-    it('Should return 400 status for empty request', async done => {
+    it('Should return 400 status for empty request', async () => {
       const res = await request(app)
         .patch(`/api/contacts/${idNewContact}`)
         .set('Authorization', `Bearer ${token}`)
@@ -166,10 +153,9 @@ describe('Testing the route api/contacts', () => {
 
       expect(res.status).toEqual(400);
       expect(res.body).toBeDefined();
-      done();
     });
 
-    it('Unauthorized error should return 401 status', async done => {
+    it('Unauthorized error should return 401 status', async () => {
       const res = await request(app)
         .patch(`/api/contacts/${idNewContact}`)
         .set('Authorization', `Bearer ${123}`)
@@ -178,39 +164,35 @@ describe('Testing the route api/contacts', () => {
 
       expect(res.status).toEqual(401);
       expect(res.body).toBeDefined();
-      done();
     });
   });
 
   describe('Testing remove contact', () => {
-    it('Remove contact success should return 200 status', async done => {
+    it('Remove contact success should return 200 status', async () => {
       const res = await request(app)
         .delete(`/api/contacts/${idNewContact}`)
         .set('Authorization', `Bearer ${token}`);
 
       expect(res.status).toEqual(200);
       expect(res.body).toBeDefined();
-      done();
     });
 
-    it('Should return 404 status with wrong id', async done => {
+    it('Should return 404 status with wrong id', async () => {
       const res = await request(app)
         .delete(`/api/contacts/${123}`)
         .set('Authorization', `Bearer ${token}`);
 
       expect(res.status).toEqual(404);
       expect(res.body).toBeDefined();
-      done();
     });
 
-    it('Unauthorized error should return 401 status', async done => {
+    it('Unauthorized error should return 401 status', async () => {
       const res = await request(app)
         .delete(`/api/contacts/${idNewContact}`)
         .set('Authorization', `Bearer ${123}`);
 
       expect(res.status).toEqual(401);
       expect(res.body).toBeDefined();
-      done();
     });
   });
 });

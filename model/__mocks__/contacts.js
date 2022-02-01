@@ -15,7 +15,7 @@ const getContactById = jest.fn((contactId, userId) => {
 
 // eslint-disable-next-line no-undef
 const addContact = jest.fn(body => {
-  const newContact = { ...body, _id: '5a378c5640e639.6545464915135898462658' };
+  const newContact = { ...body, _id: '5f8382425ba83a4f1829ca5d' };
   contacts.push(newContact);
   return newContact;
 });
